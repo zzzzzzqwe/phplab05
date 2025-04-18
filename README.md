@@ -221,7 +221,10 @@ return [
 3. Функция подключения `getPDO()` возвращает экземпляр `PDO` и выбрасывает искключения `PDO::ERRMODE_EXCEPTION`
 
 ## Задание 4. Реализация CRUD-функциональности
-Реализую следующие обработчики: Добавление рецепта (handlers/recipe/create.php); Редактирование рецепта(handlers/recipe/edit.php); Удаление рецепта (handlers/recipe/delete.php).
+Реализую следующие обработчики: 
+- Добавление рецепта (handlers/recipe/create.php); 
+- Редактирование рецепта(handlers/recipe/edit.php); 
+- Удаление рецепта (handlers/recipe/delete.php).
 
 
 `handlers/recipe/create.php`:
