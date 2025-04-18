@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../../src/handlers/db.php';
-
+ob_start();
 $pdo = getPDO();
 $id = $_GET['id'] ?? null;
 
@@ -22,3 +22,7 @@ if (!$recipe) {
 <p><strong>Описание:</strong><br><?= nl2br(htmlspecialchars($recipe['description'])) ?></p>
 <p><strong>Шаги:</strong><br><?= nl2br(htmlspecialchars($recipe['steps'])) ?></p>
 <p><strong>Теги:</strong> <?= htmlspecialchars($recipe['tags']) ?></p>
+
+<?php
+$content = ob_get_clean();
+require __DIR__ . '/../layout.php';

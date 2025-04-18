@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once __DIR__ . '/../src/handlers/db.php';
 $pdo = getPDO();
 
@@ -17,3 +18,7 @@ $recipes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </li>
     <?php endforeach; ?>
 </ul>
+
+<?php
+$content = ob_get_clean();
+require __DIR__ . '/layout.php';

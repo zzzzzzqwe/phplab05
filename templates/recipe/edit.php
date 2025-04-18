@@ -1,7 +1,24 @@
+<?php
+$title = 'Редактировать рецепт';
+ob_start();
+?>
+
 <?php if (!$recipe): ?>
     <p>Рецепт не найден</p>
 <?php else: ?>
+
     <h2>Редактировать рецепт</h2>
+
+    <?php if (!empty($errors)): ?>
+        <div class="error">
+            <ul>
+                <?php foreach ($errors as $e): ?>
+                    <li><?= htmlspecialchars($e) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+
     <form action="/edit" method="POST">
         <input type="hidden" name="id" value="<?= $recipe['id'] ?>">
 
@@ -9,7 +26,7 @@
             <input type="text" name="title" value="<?= htmlspecialchars($recipe['title']) ?>" required>
         </label><br>
 
-        <label>Категория (ID):<br>
+        <label>Категория:<br>
             <input type="number" name="category" value="<?= htmlspecialchars($recipe['category']) ?>">
         </label><br>
 
@@ -31,4 +48,9 @@
 
         <button type="submit">Сохранить изменения</button>
     </form>
+
 <?php endif; ?>
+
+<?php
+$content = ob_get_clean();
+require __DIR__ . '/../layout.php';
