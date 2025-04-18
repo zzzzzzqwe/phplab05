@@ -1,4 +1,9 @@
 <?php
+/**
+ * Роутер приложения.
+ *
+ * Обрабатывает маршруты по URL и методам HTTP.
+ */
 ob_start();
 require_once __DIR__ . '/../src/handlers/db.php';
 $pdo = getPDO();

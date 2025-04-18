@@ -1,4 +1,9 @@
 <?php
+/**
+ * Возвращает подключение к базе данных PostgreSQL.
+ *
+ * @return PDO Подключение к базе данных.
+ */
 function getPDO() {
     $config = require __DIR__ . '/../../config/db.php';
 

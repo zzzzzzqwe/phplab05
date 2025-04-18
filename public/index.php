@@ -1,4 +1,9 @@
 <?php
+/**
+ * Основной роутер приложения.
+ *
+ * Обрабатывает маршруты по URL и методам HTTP.
+*/
 $request = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
 

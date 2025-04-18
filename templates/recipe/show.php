@@ -1,4 +1,8 @@
 <?php
+/*
+Шаблон HTML-разметки для отображения рецепта.
+Содержит общую HTML-структуру.
+*/
 require_once __DIR__ . '/../../src/handlers/db.php';
 ob_start();
 $pdo = getPDO();
