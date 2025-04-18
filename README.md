@@ -391,3 +391,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ```
+
+## Задание 5. Защита от SQL-инъекций
+1. В моей лабораторной работе уже используются подготовленный(prepared) выражения:
+```php
+$stmt = $pdo->prepare("INSERT INTO recipes (title, category, ingredients, description, tags, steps)
+                                   VALUES (:title, :category, :ingredients, :description, :tags, :steps)");
+
+            $stmt->execute([
+                ':title' => $title,
+                ':category' => ($category === '' ? null : $category),
+                ':ingredients' => $ingredients,
+                ':description' => $description,
+                ':tags' => $tags,
+                ':steps' => $steps
+            ]);
+```
+
+Они обеспечивают экранирование всех входных данных перед выполнением запросов.
+
+SQL-инъекции были бы возможны при использовании `query`:
+```php
+// bad practice
+$pdo->query("SELECT * FROM recipes WHERE id = $id");
+```
+
+При таком подходе злоумышленник может ввести `id = 1 OR 1=1` и получить все данные из таблицы.
+
+Чтобы избежать этого рекоммендуется использовать `prepare() + execute()`, как выполнено в лабораторной работе
