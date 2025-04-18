@@ -221,4 +221,126 @@ return [
 3. Функция подключения `getPDO()` возвращает экземпляр `PDO` и выбрасывает искключения `PDO::ERRMODE_EXCEPTION`
 
 ## Задание 4. Реализация CRUD-функциональности
+Реализую следующие обработчики: Добавление рецепта (handlers/recipe/create.php); Редактирование рецепта(handlers/recipe/edit.php); Удаление рецепта (handlers/recipe/delete.php).
 
+
+`handlers/recipe/create.php`:
+```php
+<?php
+require_once __DIR__ . '/../db.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title = trim($_POST['title'] ?? '');
+    $category = $_POST['category'] ?? null;
+    $ingredients = trim($_POST['ingredients'] ?? '');
+    $description = trim($_POST['description'] ?? '');
+    $steps = trim($_POST['steps'] ?? '');
+
+    $errors = [];
+
+    if ($title === '') {
+        $errors[] = 'Название обязательно';
+    }
+
+    if (empty($errors)) {
+        try {
+            $pdo = getPDO();
+            $tags = trim($_POST['tags'] ?? '');
+
+
+    $stmt = $pdo->prepare("INSERT INTO recipes (title, category, ingredients, description, tags, steps)
+                       VALUES (:title, :category, :ingredients, :description, :tags, :steps)");
+
+
+if (!$stmt->execute([
+    ':title' => $title,
+    ':category' => ($category === '' ? null : $category),
+    ':ingredients' => $ingredients,
+    ':description' => $description,
+    ':tags' => $tags,
+    ':steps' => $steps
+])) {
+    print_r($stmt->errorInfo());
+    exit;
+}
+
+           header('Location: /');
+            exit;
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    } else {
+        foreach ($errors as $err) {
+            echo "<p style='color:red'>$err</p>";
+        }
+    }
+} else {
+    echo "ошибка";
+}
+
+header('Location: /');
+exit;
+```
+
+`handlers/recipe/edit.php`:
+```php
+<?php
+require_once __DIR__ . '/../db.php';
+
+$pdo = getPDO();
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
+    $stmt = $pdo->prepare("SELECT * FROM recipes WHERE id = :id");
+    $stmt->execute([':id' => $_GET['id']]);
+    $recipe = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($recipe) {
+        include __DIR__ . '/../../../templates/recipe/edit.php';
+    } else {
+        echo "Рецепт не найден.";
+    }
+
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $_POST['id'] ?? null;
+    $title = trim($_POST['title'] ?? '');
+    $category = $_POST['category'] ?? null;
+    $ingredients = trim($_POST['ingredients'] ?? '');
+    $description = trim($_POST['description'] ?? '');
+    $tags = trim($_POST['tags'] ?? '');
+    $steps = trim($_POST['steps'] ?? '');
+
+    if ($id && $title) {
+        $stmt = $pdo->prepare("UPDATE recipes SET title = :title, category = :category, ingredients = :ingredients,
+            description = :description, tags = :tags, steps = :steps WHERE id = :id");
+
+        $stmt->execute([
+            ':title' => $title,
+            ':category' => ($category === '' ? null : $category),
+            ':ingredients' => $ingredients,
+            ':description' => $description,
+            ':tags' => $tags,
+            ':steps' => $steps,
+            ':id' => $id
+        ]);
+    }
+
+    header('Location: /');
+    exit;
+}
+```
+
+`handlers/recipe/delete.php`:
+```php
+<?php
+require_once __DIR__ . '/../db.php';
+
+if (isset($_GET['id'])) {
+    $pdo = getPDO();
+    $stmt = $pdo->prepare("DELETE FROM recipes WHERE id = :id");
+    $stmt->execute([':id' => $_GET['id']]);
+}
+
+header('Location: /');
+exit;
+
+```
