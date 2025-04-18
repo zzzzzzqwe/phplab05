@@ -9,7 +9,7 @@
 
 ## Краткое видео с демонстрацией работы проекта
 
-<video src="screenshots/showcase.mp4video.mp4" controls width="600"></video>
+[screenshots/showcase.mp4video.mp4](https://github.com/user-attachments/assets/c8bda90b-a0f6-4445-8195-4d8eebe815c7)
 
 ## Инструкция к запуску
 1. Клонировать проект на компьютер.
