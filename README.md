@@ -7,6 +7,25 @@
 ## Цель работы
 Освоить архитектуру с единой точкой входа, подключение шаблонов для визуализации страниц, а также переход от хранения данных в файле к использованию базы данных (PostgreSQL).
 
+## Инструкция к запуску
+1. Клонировать проект на компьютер.
+
+2. Запустить командную строку в папке phplab05.
+
+3. Выполнить команду php -S localhost:8000 -t public.
+
+4. Перейти на http://localhost:8000/.
+
+**ВАЖНО!**
+
+В проекте в качестве `СУБД` используется `PostgreSQL`<br>
+Для того чтобы код работал, нужно изменить конфигурационный файл `php.ini` и раскомментировать строки:
+- `extension=pdo_pgsql`
+- `extension=pgsql`
+
+А также убедиться, что путь `extension_dir = ...` соответсвует папке `ext` на компьютере
+
+
 ## Задание 1. Подготовка среды
 Для работы буду использовать субд `PostgreSQL`. 
 
@@ -165,3 +184,41 @@ require __DIR__ . '/../layout.php';
 Итоговая структура проекта:
 
 ![image](screenshots/Screenshot_2.png)
+
+## Задание 3. Подключение к базе данных
+1. В файле `src/db.php` реализую функцию подключения к бд через PDO:
+
+```PHP
+<?php
+function getPDO() {
+    $config = require __DIR__ . '/../../config/db.php';
+
+
+    $dsn = "pgsql:host={$config['host']};port={$config['port']};dbname={$config['dbname']}";
+
+    try {
+        $pdo = new PDO($dsn, $config['user'], $config['password']);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
+    } catch (PDOException $e) {
+        echo($e->getMessage());
+    }
+}
+```
+
+2. Данные для подключения к бд храню в `config/db.php`:
+```php
+<?php
+return [
+    'host' => 'localhost',
+    'port' => '5432',
+    'dbname' => 'recipe_book',
+    'user' => "postgres",
+    'password' => 'password'
+];
+```
+
+3. Функция подключения `getPDO()` возвращает экземпляр `PDO` и выбрасывает искключения `PDO::ERRMODE_EXCEPTION`
+
+## Задание 4. Реализация CRUD-функциональности
+

@@ -1,21 +1,30 @@
-
 <?php
 $request = $_SERVER['REQUEST_URI'];
+$method = $_SERVER['REQUEST_METHOD'];
 
-switch ($request) {
-    case "/": // just in case
-        require_once '../templates/index.php';
-        break;
-    case "/index":
+switch (true) {
+    case $request === '/' || $request === '/index':
         require_once '../templates/index.php';
         break;
 
-    case '/create': 
+    case $request === '/create' && $method === 'GET':
         require_once '../templates/recipe/create.php';
         break;
 
-    case '/recipe':
-        require_once '../templates/recipe/recipe.php';
+    case $request === '/create' && $method === 'POST':
+        require_once '../src/handlers/recipe/create.php';
+        break;
+
+    case str_starts_with($request, '/edit'):
+        require_once '../src/handlers/recipe/edit.php';
+        break;
+
+    case str_starts_with($request, '/delete'):
+        require_once '../src/handlers/recipe/delete.php';
+        break;
+
+    case str_starts_with($request, '/recipe'):
+        require_once '../templates/recipe/show.php';
         break;
 
     default:
